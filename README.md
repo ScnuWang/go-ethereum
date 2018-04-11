@@ -32,7 +32,7 @@ go-ethereum项目带有几个在`cmd`目录中找到的包装器/可执行文件
 
 | Command    | Description |
 |:----------:|-------------|
-| **`geth`** | 主要以太坊CLI客户端. 它是进入以太坊网络的切入点 (main-, test- or private net), 能够作为完整节点（默认）存档节点（保留所有历史状态）或轻型节点（实时检索数据）运行。它可以被其他进程用作通过HTTP，WebSocket和/或IPC传输顶层暴露的JSON RPC端点进入以太坊网络的网关。用于命令行选项的`geth --help`和[CLI Wiki页面]（https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options）。 |
+| **`geth`** | 主要以太坊CLI客户端. 它是进入以太坊网络的切入点 (main-, test- or private net), 能够作为完整节点（full node：默认）存档节点（archive node：保留所有历史状态）或轻型节点（light node ：实时检索数据）运行。它可以被其他进程用作通过HTTP，WebSocket和/或IPC传输顶层暴露的JSON RPC端点进入以太坊网络的网关。用于命令行选项的`geth --help`和[CLI Wiki页面]（https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options）。 |
 | `abigen` | 源代码生成器将以太坊合约定义转换为易于使用的编译时类型安全的Go软件包。 如果合约字节码也可用它运行在普通的[Ethereum Contract ABI]（https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI）上，具有扩展功能。 但它也接受Solidity源文件，使开发更加简化。 详细请看 [Native DApps](https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki页面. |
 | `bootnode` | 剥离了我们以太坊客户端实现的版本，它只参与网络节点发现协议，但不运行任何更高级别的应用协议。它可以用作轻量级引导节点来帮助找到专用网络中的对等设备。 |
 | `evm` | EVM（以太坊虚拟机）开发工具版本，能够在可配置环境和执行模式下运行字节码片段。其目的是允许对EVM操作码进行隔离的，细粒度的调试 (e.g. `evm --code 60ff60ff --debug`). |
@@ -43,17 +43,11 @@ go-ethereum项目带有几个在`cmd`目录中找到的包装器/可执行文件
 
 ## 运行 geth
 
-Going through all the possible command line flags is out of scope here (please consult our
-[CLI Wiki page](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)), but we've
-enumerated a few common parameter combos to get you up to speed quickly on how you can run your
-own Geth instance.
+查看所有可能的命令行标志超出了范围（请参考我们的[CLI Wiki page](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)），但我们已经列举了几个常用参数组合，以便您快速了解如何运行自己的Geth实例。
 
 ### 在以太坊主网络上的完整节点
 
-By far the most common scenario is people wanting to simply interact with the Ethereum network:
-create accounts; transfer funds; deploy and interact with contracts. For this particular use-case
-the user doesn't care about years-old historical data, so we can fast-sync quickly to the current
-state of the network. To do so:
+到目前为止，最常见的情况是人们希望简单地与以太坊网络互动：创建账户;转移资金;部署和与合同交互。对于这种特殊的使用情况，用户不会关心过去几年的历史数据，所以我们可以快速同步到当前的网络状态。要做到这一点：
 
 ```
 $ geth console
@@ -61,21 +55,12 @@ $ geth console
 
 This command will:
 
- * Start geth in fast sync mode (default, can be changed with the `--syncmode` flag), causing it to
-   download more data in exchange for avoiding processing the entire history of the Ethereum network,
-   which is very CPU intensive.
- * Start up Geth's built-in interactive [JavaScript console](https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console),
-   (via the trailing `console` subcommand) through which you can invoke all official [`web3` methods](https://github.com/ethereum/wiki/wiki/JavaScript-API)
-   as well as Geth's own [management APIs](https://github.com/ethereum/go-ethereum/wiki/Management-APIs).
-   This too is optional and if you leave it out you can always attach to an already running Geth instance
-   with `geth attach`.
+ * 以快速同步模式启动geth（默认情况下，可以使用--syncmode标志进行更改），导致它下载更多数据以避免处理以太网网络的整个历史记录，这是非常耗费CPU的。
+ * 启动Geth的内置交互式[JavaScript console](https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console)（通过尾部控制台子命令），通过它可以调用所有官方[`web3` methods](https://github.com/ethereum/wiki/wiki/JavaScript-API)方法以及Geth自己的[management APIs](https://github.com/ethereum/go-ethereum/wiki/Management-APIs)。这也是可选的，如果你把它放在外面，你可以使用geth attach附加到已经运行的Geth实例。 
 
 ### 以太坊测试网络上的完整节点
 
-Transitioning towards developers, if you'd like to play around with creating Ethereum contracts, you
-almost certainly would like to do that without any real money involved until you get the hang of the
-entire system. In other words, instead of attaching to the main network, you want to join the **test**
-network with your node, which is fully equivalent to the main network, but with play-Ether only.
+向开发人员过渡时，如果您想要创建以太坊合约，几乎可以肯定的是，除非您掌握整个系统，否则不需要真正的资金。换句话说，您不需要连接到主网络，而是希望加入与您的节点相同的测试网络，该节点完全等同于主网络，但只能使用Play-Ether。
 
 ```
 $ geth --testnet console
@@ -101,7 +86,7 @@ separate the two networks and will not make any accounts available between them.
 
 ### Rinkeby测试网络上的完整节点
 
-The above test network is a cross client one based on the ethash proof-of-work consensus algorithm. As such, it has certain extra overhead and is more susceptible to reorganization attacks due to the network's low difficulty / security. Go Ethereum also supports connecting to a proof-of-authority based test network called [*Rinkeby*](https://www.rinkeby.io) (operated by members of the community). This network is lighter, more secure, but is only supported by go-ethereum.
+上述测试网络是基于ethash工作证明共识算法的跨客户端网络。因此，由于网络的低难度/安全性，它有一定的额外开销，并且更容易受到重组攻击。 Go Ethereum还支持连接到称为[*Rinkeby*](https://www.rinkeby.io)的权威证明测试网络（由社区成员运营）。这个网络更轻，更安全，但只受到以太坊的支持。
 
 ```
 $ geth --rinkeby console
@@ -109,23 +94,23 @@ $ geth --rinkeby console
 
 ### Configuration
 
-As an alternative to passing the numerous flags to the `geth` binary, you can also pass a configuration file via:
+作为将众多标志传递给geth二进制文件的替代方法，您还可以通过以下方式传递配置文件：
 
 ```
 $ geth --config /path/to/your_config.toml
 ```
 
-To get an idea how the file should look like you can use the `dumpconfig` subcommand to export your existing configuration:
+要想知道文件应该如何看起来像你可以使用dumpconfig子命令来导出你现有的配置：
 
 ```
 $ geth --your-favourite-flags dumpconfig
 ```
 
-*Note: This works only with geth v1.6.0 and above.*
+*注意：这只适用于geth v1.6.0及以上版本。*
 
 #### Docker quick start
 
-One of the quickest ways to get Ethereum up and running on your machine is by using Docker:
+在您的机器上启动并运行以太坊的最快方法之一是使用Docker：
 
 ```
 docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
@@ -133,11 +118,11 @@ docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
            ethereum/client-go
 ```
 
-This will start geth in fast-sync mode with a DB memory allowance of 1GB just as the above command does.  It will also create a persistent volume in your home directory for saving your blockchain as well as map the default ports. There is also an `alpine` tag available for a slim version of the image.
+这将在快速同步模式下启动，具有1GB的DB内存容量，就像上述命令一样。它还会在您的主目录中创建一个永久卷，以保存您的区块链以及映射默认端口。还有一个阿尔卑斯标签可用于图像的纤细版本。
 
-Do not forget `--rpcaddr 0.0.0.0`, if you want to access RPC from other containers and/or hosts. By default, `geth` binds to the local interface and RPC endpoints is not accessible from the outside.
+如果您想从其他容器和/或主机访问RPC，请不要忘记--rpcaddr 0.0.0.0。默认情况下，geth绑定到本地接口，RPC端点无法从外部访问。
 
-### Programatically interfacing Geth nodes
+### 以编程方式连接Geth节点
 
 As a developer, sooner rather than later you'll want to start interacting with Geth and the Ethereum
 network via your own programs and not manually through the console. To aid this, Geth has built-in
