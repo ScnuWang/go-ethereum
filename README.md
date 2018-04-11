@@ -124,50 +124,37 @@ docker run -d --name ethereum-node -v /Users/alice/ethereum:/root \
 
 ### 以编程方式连接Geth节点
 
-As a developer, sooner rather than later you'll want to start interacting with Geth and the Ethereum
-network via your own programs and not manually through the console. To aid this, Geth has built-in
-support for a JSON-RPC based APIs ([standard APIs](https://github.com/ethereum/wiki/wiki/JSON-RPC) and
-[Geth specific APIs](https://github.com/ethereum/go-ethereum/wiki/Management-APIs)). These can be
-exposed via HTTP, WebSockets and IPC (unix sockets on unix based platforms, and named pipes on Windows).
+作为一名开发人员，不久后你会想通过自己的程序开始与Geth和Ethereum网络进行交互，而不是通过控制台手动进行交互。为此，Geth内置了对基于JSON-RPC的API（([standard APIs](https://github.com/ethereum/wiki/wiki/JSON-RPC)和[Geth specific APIs](https://github.com/ethereum/go-ethereum/wiki/Management-APIs)）的支持。这些可以通过HTTP，WebSockets和IPC（基于unix的平台上的unix套接字，以及Windows上的命名管道）公开。
 
-The IPC interface is enabled by default and exposes all the APIs supported by Geth, whereas the HTTP
-and WS interfaces need to manually be enabled and only expose a subset of APIs due to security reasons.
-These can be turned on/off and configured as you'd expect.
+IPC接口默认启用并公开Geth支持的所有API，而HTTP和WS接口需要手动启用，并且由于安全原因只公开API的子集。这些可以打开/关闭，并按照您的预期进行配置。
 
-HTTP based JSON-RPC API options:
+基于HTTP的JSON-RPC API选项：
 
-  * `--rpc` Enable the HTTP-RPC server
-  * `--rpcaddr` HTTP-RPC server listening interface (default: "localhost")
-  * `--rpcport` HTTP-RPC server listening port (default: 8545)
-  * `--rpcapi` API's offered over the HTTP-RPC interface (default: "eth,net,web3")
-  * `--rpccorsdomain` Comma separated list of domains from which to accept cross origin requests (browser enforced)
-  * `--ws` Enable the WS-RPC server
-  * `--wsaddr` WS-RPC server listening interface (default: "localhost")
-  * `--wsport` WS-RPC server listening port (default: 8546)
-  * `--wsapi` API's offered over the WS-RPC interface (default: "eth,net,web3")
-  * `--wsorigins` Origins from which to accept websockets requests
-  * `--ipcdisable` Disable the IPC-RPC server
-  * `--ipcapi` API's offered over the IPC-RPC interface (default: "admin,debug,eth,miner,net,personal,shh,txpool,web3")
-  * `--ipcpath` Filename for IPC socket/pipe within the datadir (explicit paths escape it)
+  * `--rpc` 启用HTTP-RPC服务器
+  * `--rpcaddr` HTTP-RPC服务器侦听接口 (default: "localhost")
+  * `--rpcport` HTTP-RPC服务器侦听端口 (default: 8545)
+  * `--rpcapi` API通过HTTP-RPC接口提供 (default: "eth,net,web3")
+  * `--rpccorsdomain` 逗号分隔的域名列表，用于接受跨源请求 (浏览器强制执行)
+  * `--ws` 启用WS-RPC服务器
+  * `--wsaddr` WS-RPC服务器侦听接口 (default: "localhost")
+  * `--wsport` WS-RPC服务器侦听端口 (default: 8546)
+  * `--wsapi` API通过WS-RPC接口提供 (default: "eth,net,web3")
+  * `--wsorigins` 接受websockets请求的起源
+  * `--ipcdisable` 禁用IPC-RPC服务器
+  * `--ipcapi` API通过IPC-RPC接口提供 (default: "admin,debug,eth,miner,net,personal,shh,txpool,web3")
+  * `--ipcpath` 数据区中IPC套接字/管道的文件名（显式路径将其转义）
 
-You'll need to use your own programming environments' capabilities (libraries, tools, etc) to connect
-via HTTP, WS or IPC to a Geth node configured with the above flags and you'll need to speak [JSON-RPC](http://www.jsonrpc.org/specification)
-on all transports. You can reuse the same connection for multiple requests!
+您需要使用您自己的编程环境的功能（库，工具等）通过HTTP，WS或IPC连接到配置有上述标志的Geth节点，并且您需要在所有传输中说出[JSON-RPC](http://www.jsonrpc.org/specification)。您可以对多个请求重复使用相同的连接！
 
-**Note: Please understand the security implications of opening up an HTTP/WS based transport before
-doing so! Hackers on the internet are actively trying to subvert Ethereum nodes with exposed APIs!
-Further, all browser tabs can access locally running webservers, so malicious webpages could try to
-subvert locally available APIs!**
+**注意：请理解在此之前打开基于HTTP / WS的传输所带来的安全隐患！互联网上的黑客正在积极尝试用暴露的API来颠覆以太节点！此外，所有浏览器选项卡都可以访问本地运行的Web服务器，因此恶意网页可能会尝试颠覆本地可用的API！**
 
-### Operating a private network
+### 操作专用网络
 
-Maintaining your own private network is more involved as a lot of configurations taken for granted in
-the official networks need to be manually set up.
+维护您自己的专用网络更为重要，因为官方网络中许多理所当然的配置需要手动设置。
 
-#### Defining the private genesis state
+#### 定义私人起源状态
 
-First, you'll need to create the genesis state of your networks, which all nodes need to be aware of
-and agree upon. This consists of a small JSON file (e.g. call it `genesis.json`):
+首先，您需要创建您的网络的起源状态，所有节点都需要了解并达成一致。这包含一个小的JSON文件（例如，将其称为genesis.json）：
 
 ```json
 {
@@ -189,10 +176,7 @@ and agree upon. This consists of a small JSON file (e.g. call it `genesis.json`)
 }
 ```
 
-The above fields should be fine for most purposes, although we'd recommend changing the `nonce` to
-some random value so you prevent unknown remote nodes from being able to connect to you. If you'd
-like to pre-fund some accounts for easier testing, you can populate the `alloc` field with account
-configs:
+上述字段对于大多数目的应该没问题，但我们建议将随机数更改为某个随机值，以防止未知的远程节点能够连接到您。如果您想预先为某些帐户提供资金以便于测试，则可以使用帐户配置填充alloc字段：
 
 ```json
 "alloc": {
@@ -201,64 +185,46 @@ configs:
 }
 ```
 
-With the genesis state defined in the above JSON file, you'll need to initialize **every** Geth node
-with it prior to starting it up to ensure all blockchain parameters are correctly set:
+在上面的JSON文件中定义了Geneis状态之后，您需要在启动每个Geth节点之前初始化它，以确保正确设置所有区块链参数：
 
 ```
 $ geth init path/to/genesis.json
 ```
 
-#### Creating the rendezvous point
+#### 创建会合点
 
-With all nodes that you want to run initialized to the desired genesis state, you'll need to start a
-bootstrap node that others can use to find each other in your network and/or over the internet. The
-clean way is to configure and run a dedicated bootnode:
+如果所有要运行的节点都初始化为所需的生成状态，则需要启动引导程序节点，其他人可以使用它来在网络中和/或通过互联网找到彼此。干净的方法是配置和运行专用的引导节点：
 
 ```
 $ bootnode --genkey=boot.key
 $ bootnode --nodekey=boot.key
 ```
 
-With the bootnode online, it will display an [`enode` URL](https://github.com/ethereum/wiki/wiki/enode-url-format)
-that other nodes can use to connect to it and exchange peer information. Make sure to replace the
-displayed IP address information (most probably `[::]`) with your externally accessible IP to get the
-actual `enode` URL.
+在bootnode联机的情况下，它会显示一个[`enode` URL](https://github.com/ethereum/wiki/wiki/enode-url-format)，其他节点可以使用它来连接它并交换对等信息。确保使用外部可访问IP替换显示的IP地址信息（最可能是[::]）以获取实际的`enode` URL。
 
-*Note: You could also use a full fledged Geth node as a bootnode, but it's the less recommended way.*
+*注意：您也可以使用完全成熟的Geth节点作为引导节点，但这是不太推荐的方式。*
 
-#### Starting up your member nodes
+#### 启动您的成员节点
 
-With the bootnode operational and externally reachable (you can try `telnet <ip> <port>` to ensure
-it's indeed reachable), start every subsequent Geth node pointed to the bootnode for peer discovery
-via the `--bootnodes` flag. It will probably also be desirable to keep the data directory of your
-private network separated, so do also specify a custom `--datadir` flag.
+在bootnode运行并可从外部访问的情况下（您可以尝试telnet <ip> <port>以确保它确实可以访问），请通过--bootnodes标志启动每个后续Geth节点，指向用于对等发现的bootnode。将私有网络的数据目录分开可能也是可取的，所以也要指定一个自定义--datadir 标志。
 
 ```
 $ geth --datadir=path/to/custom/data/folder --bootnodes=<bootnode-enode-url-from-above>
 ```
 
-*Note: Since your network will be completely cut off from the main and test networks, you'll also
-need to configure a miner to process transactions and create new blocks for you.*
+*注意：由于您的网络将与主网络和测试网络完全隔离，因此您还需要配置矿工来处理事务并为您创建新块。*
 
-#### Running a private miner
+#### 经营私人矿工
 
-Mining on the public Ethereum network is a complex task as it's only feasible using GPUs, requiring
-an OpenCL or CUDA enabled `ethminer` instance. For information on such a setup, please consult the
-[EtherMining subreddit](https://www.reddit.com/r/EtherMining/) and the [Genoil miner](https://github.com/Genoil/cpp-ethereum)
-repository.
+在公共以太坊网络上进行挖掘是一项复杂的任务，因为它只能使用GPU，需要OpenCL或CUDA启用的`ethminer`实例。有关这种设置的信息，请咨询[EtherMining subreddit](https://www.reddit.com/r/EtherMining/)和[Genoil miner](https://github.com/Genoil/cpp-ethereum)资源库。
 
-In a private network setting however, a single CPU miner instance is more than enough for practical
-purposes as it can produce a stable stream of blocks at the correct intervals without needing heavy
-resources (consider running on a single thread, no need for multiple ones either). To start a Geth
-instance for mining, run it with all your usual flags, extended by:
+但是，在专用网络设置中，单个CPU采集器实例对于实际应用来说已经足够了，因为它可以在不需要大量资源的情况下以正确的时间间隔产生稳定的数据块流（考虑在单个线程上运行，不需要多个）。要为挖掘启动Geth实例，请使用所有通常的标志运行它，并通过扩展：
 
 ```
 $ geth <usual-flags> --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000000
 ```
 
-Which will start mining blocks and transactions on a single CPU thread, crediting all proceedings to
-the account specified by `--etherbase`. You can further tune the mining by changing the default gas
-limit blocks converge to (`--targetgaslimit`) and the price transactions are accepted at (`--gasprice`).
+这将在单个CPU线程上开始挖掘块和事务，并将所有过程记录到由--etherbase 指定的帐户。您可以通过将默认气体限制块更改为（--targetgaslimit）并在（--gasprice）接受价格交易来进一步调整采矿。
 
 ## Contribution
 
