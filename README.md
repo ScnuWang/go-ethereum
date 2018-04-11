@@ -1,6 +1,6 @@
 ## Go Ethereum
 
-Official golang implementation of the Ethereum protocol.
+以太坊协议的官方golang实现。
 
 [![API Reference](
 https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f676f6c616e672f6764646f3f7374617475732e737667
@@ -9,48 +9,46 @@ https://camo.githubusercontent.com/915b7be44ada53c290eb157634330494ebe3e30a/6874
 [![Travis](https://travis-ci.org/ethereum/go-ethereum.svg?branch=master)](https://travis-ci.org/ethereum/go-ethereum)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereum/go-ethereum?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Automated builds are available for stable releases and the unstable master branch.
-Binary archives are published at https://geth.ethereum.org/downloads/.
+自动构建可用于稳定版本和不稳定的主分支。
+二进制档案在https://geth.ethereum.org/downloads/上发布。
 
-## Building the source
+## 构建源代码
 
-For prerequisites and detailed build instructions please read the
-[Installation Instructions](https://github.com/ethereum/go-ethereum/wiki/Building-Ethereum)
-on the wiki.
+有关先决条件和详细的构建说明，请阅读[安装说明]（https://github.com/ethereum/go-ethereum/wiki/Building-Ethereum）在wiki上。
 
-Building geth requires both a Go (version 1.7 or later) and a C compiler.
-You can install them using your favourite package manager.
-Once the dependencies are installed, run
+构建geth需要Go（1.7或更高版本）和C编译器。
+你可以使用你喜欢的包管理器来安装它们
+一旦所有的依赖关系都安装完毕之后就运行：
 
     make geth
 
-or, to build the full suite of utilities:
+或者，构建全套实用程序：
 
     make all
 
-## Executables
+## 可执行文件
 
-The go-ethereum project comes with several wrappers/executables found in the `cmd` directory.
+go-ethereum项目带有几个在`cmd`目录中找到的包装器/可执行文件。
 
 | Command    | Description |
 |:----------:|-------------|
-| **`geth`** | Our main Ethereum CLI client. It is the entry point into the Ethereum network (main-, test- or private net), capable of running as a full node (default) archive node (retaining all historical state) or a light node (retrieving data live). It can be used by other processes as a gateway into the Ethereum network via JSON RPC endpoints exposed on top of HTTP, WebSocket and/or IPC transports. `geth --help` and the [CLI Wiki page](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options) for command line options. |
-| `abigen` | Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages. It operates on plain [Ethereum contract ABIs](https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI) with expanded functionality if the contract bytecode is also available. However it also accepts Solidity source files, making development much more streamlined. Please see our [Native DApps](https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki page for details. |
-| `bootnode` | Stripped down version of our Ethereum client implementation that only takes part in the network node discovery protocol, but does not run any of the higher level application protocols. It can be used as a lightweight bootstrap node to aid in finding peers in private networks. |
-| `evm` | Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode. Its purpose is to allow isolated, fine-grained debugging of EVM opcodes (e.g. `evm --code 60ff60ff --debug`). |
-| `gethrpctest` | Developer utility tool to support our [ethereum/rpc-test](https://github.com/ethereum/rpc-tests) test suite which validates baseline conformity to the [Ethereum JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC) specs. Please see the [test suite's readme](https://github.com/ethereum/rpc-tests/blob/master/README.md) for details. |
-| `rlpdump` | Developer utility tool to convert binary RLP ([Recursive Length Prefix](https://github.com/ethereum/wiki/wiki/RLP)) dumps (data encoding used by the Ethereum protocol both network as well as consensus wise) to user friendlier hierarchical representation (e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
-| `swarm`    | swarm daemon and tools. This is the entrypoint for the swarm network. `swarm --help` for command line options and subcommands. See https://swarm-guide.readthedocs.io for swarm documentation. |
-| `puppeth`    | a CLI wizard that aids in creating a new Ethereum network. |
+| **`geth`** | 主要以太坊CLI客户端. 它是进入以太坊网络的切入点 (main-, test- or private net), 能够作为完整节点（默认）存档节点（保留所有历史状态）或轻型节点（实时检索数据）运行。它可以被其他进程用作通过HTTP，WebSocket和/或IPC传输顶层暴露的JSON RPC端点进入以太坊网络的网关。用于命令行选项的`geth --help`和[CLI Wiki页面]（https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options）。 |
+| `abigen` | 源代码生成器将以太坊合约定义转换为易于使用的编译时类型安全的Go软件包。 如果合约字节码也可用它运行在普通的[Ethereum Contract ABI]（https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI）上，具有扩展功能。 但它也接受Solidity源文件，使开发更加简化。 详细请看 [Native DApps](https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts) wiki页面. |
+| `bootnode` | 剥离了我们以太坊客户端实现的版本，它只参与网络节点发现协议，但不运行任何更高级别的应用协议。它可以用作轻量级引导节点来帮助找到专用网络中的对等设备。 |
+| `evm` | EVM（以太坊虚拟机）开发工具版本，能够在可配置环境和执行模式下运行字节码片段。其目的是允许对EVM操作码进行隔离的，细粒度的调试 (e.g. `evm --code 60ff60ff --debug`). |
+| `gethrpctest` |开发工具支持我们[ethereum / rpc-test]（https://github.com/ethereum/rpc-tests）测试套件，该套件验证基线符合[Ethereum JSON RPC]（https://github.com/ ethereum / wiki / wiki / JSON-RPC）规格。有关详细信息，请参阅[测试套件的自述文件]（https://github.com/ethereum/rpc-tests/blob/master/README.md）。 |
+| `rlpdump` | 用于将二进制RLP（[递归长度前缀]（https://github.com/ethereum/wiki/wiki/RLP））转储（Ethereum协议使用的数据编码以及网络共识）的开发者实用工具给用户更友好的分层表示(e.g. `rlpdump --hex CE0183FFFFFFC4C304050583616263`). |
+| `swarm`    | swarm守护进程和工具。这是swarm网络的入口点。 `swarm --help`命令行选项和子命令。有关群集文档，请参阅https://swarm-guide.readthedocs.io。 |
+| `puppeth`    |有助于创建新以太坊网络的CLI向导。 |
 
-## Running geth
+## 运行 geth
 
 Going through all the possible command line flags is out of scope here (please consult our
 [CLI Wiki page](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)), but we've
 enumerated a few common parameter combos to get you up to speed quickly on how you can run your
 own Geth instance.
 
-### Full node on the main Ethereum network
+### 在以太坊主网络上的完整节点
 
 By far the most common scenario is people wanting to simply interact with the Ethereum network:
 create accounts; transfer funds; deploy and interact with contracts. For this particular use-case
@@ -72,7 +70,7 @@ This command will:
    This too is optional and if you leave it out you can always attach to an already running Geth instance
    with `geth attach`.
 
-### Full node on the Ethereum test network
+### 以太坊测试网络上的完整节点
 
 Transitioning towards developers, if you'd like to play around with creating Ethereum contracts, you
 almost certainly would like to do that without any real money involved until you get the hang of the
@@ -101,7 +99,7 @@ over between the main network and test network, you should make sure to always u
 for play-money and real-money. Unless you manually move accounts, Geth will by default correctly
 separate the two networks and will not make any accounts available between them.*
 
-### Full node on the Rinkeby test network
+### Rinkeby测试网络上的完整节点
 
 The above test network is a cross client one based on the ethash proof-of-work consensus algorithm. As such, it has certain extra overhead and is more susceptible to reorganization attacks due to the network's low difficulty / security. Go Ethereum also supports connecting to a proof-of-authority based test network called [*Rinkeby*](https://www.rinkeby.io) (operated by members of the community). This network is lighter, more secure, but is only supported by go-ethereum.
 
